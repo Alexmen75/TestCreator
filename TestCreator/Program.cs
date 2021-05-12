@@ -16,6 +16,7 @@ namespace TestCreator
             string Answer;
             string variant;
             List<string> ExistQuestion = new List<string>();
+            List<string> ExistVariant = new List<string>();
             DirectoryInfo dir = new DirectoryInfo(path);
             if (!dir.Exists)
             {
@@ -66,6 +67,7 @@ namespace TestCreator
                     Console.WriteLine("Ответ: ");
                     Console.ForegroundColor = ConsoleColor.Green;
                     Answer = Console.ReadLine();
+                    ExistVariant.Add(Answer);
                     Console.ResetColor();
                     SW.WriteLine("<variant>" + Answer);
                     int i = 0;
@@ -73,12 +75,22 @@ namespace TestCreator
                     {
                         Console.WriteLine("Вариани{0}:", i + 2);
                         variant = Console.ReadLine();
+                        if (ExistVariant.Contains(variant))
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Такой вариант уже существует");
+                            Console.ReadKey();
+                            Console.ResetColor();
+                            continue;
+                        }
+                        ExistVariant.Add(variant);
                         SW.WriteLine("<variant>" + variant);
                         i++;
                     }
                     SW.WriteLine("\n");
                     SW.Flush();
                     Console.Clear();
+                    ExistVariant.Clear();
                 }
             }
         }
