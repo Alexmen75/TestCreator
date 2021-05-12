@@ -11,7 +11,7 @@ namespace TestCreator
     {
         static void Main(string[] args)
         {
-            string path = @"C:\Users\BaronLeCringe\Desktop\test";
+            string path = Environment.CurrentDirectory+"/Test";
             string Question;
             string Answer;
             string variant;
