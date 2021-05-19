@@ -23,9 +23,9 @@ namespace ConcatTest
             SecondPath = SecondPath.Trim();
             Console.Clear();
             List<string> Questions = new List<string>();
-            string[] QVarinant = new string[6];
+            string[] QVarinant = new string[2];
             string Line="e";
-            using (StreamReader SR = new StreamReader(MainPath, Encoding.Default))
+            using (StreamReader SR = new StreamReader(MainPath))
             {
                 string line;
                 while ((line = SR.ReadLine()) != null)
@@ -38,33 +38,36 @@ namespace ConcatTest
             }
             try
             {
-
-
-                using (StreamWriter SW = new StreamWriter(MainPath, true, Encoding.Default))
+                using (StreamWriter SW = new StreamWriter(MainPath, true))
                 {
-                    using (StreamReader SR = new StreamReader(SecondPath, Encoding.Default))
+                    using (StreamReader SR = new StreamReader(SecondPath))
                     {
-
                         while (Line != null)
                         {
-
-                            for (int i = 0; i < 6; i++)
+                            Line = SR.ReadLine();
+                            if (Line.Contains("<question>"))
                             {
-                                Line = SR.ReadLine();
-                                if (!Line.Contains("<variant>") && !Line.Contains("<question>"))
+                                for (int i = 0; i < 2; i++)
                                 {
-                                    i--;
-                                    continue;
+                                    if (!Line.Contains("<variant>") && !Line.Contains("<question>"))
+                                    {
+                                        i--;
+                                        Line = SR.ReadLine();
+                                        continue;
+                                    }
+                                    QVarinant[i] = Line;
+                                    Line = SR.ReadLine();
                                 }
-                                QVarinant[i] = Line;
-                                
+                            }
+                            else
+                            {
+                                continue;
                             }
                             if (!Questions.Contains(QVarinant[0]))
                             {
                                 Console.WriteLine("Новый вопрос\n"+QVarinant[0]+"\n");
                                 foreach (string variant in QVarinant)
                                 {
-                                    //Console.WriteLine(QVarinant[0]);
                                     SW.WriteLine(variant);
                                 }
                                 count++;
@@ -74,17 +77,15 @@ namespace ConcatTest
                             {
                                 exist++;
                             }
-                            
                         }
-
                     }
                 }
             }
             catch(Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 Console.WriteLine("Завершено!");
             }
-            
             Console.WriteLine("Новых вопросов - " + count);
             Console.WriteLine("Схожих вопросов - " + exist);
             Console.ReadKey();
